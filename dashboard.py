@@ -45,5 +45,12 @@ def main():
         st.write("Minimum value: ", df_google_fit[selected_header_google_fit].min())
         st.write("Maximum value: ", df_google_fit[selected_header_google_fit].max())
 
-if __name__ == '__main__':
-    main()
+        # 7-day moving average of heart points
+        df_google_fit['7-day avg heart points'] = df_google_fit['Heart Points'].rolling(window=7).mean()
+        fig_7day_avg = px.line(df_google_fit, x='Time of Measurement', y='7-day avg heart points')
+        st.plotly_chart(fig_7day_avg)
+
+        # Count of days with more than 10,000 steps
+        df_google_fit['over_10000'] = df_google_fit['Steps'] >= 10000
+        fig_steps = px.bar(df_google_fit, x='Time of Measurement', y='over_10000', color='over_10000')
+       
